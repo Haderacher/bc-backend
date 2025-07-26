@@ -1,3 +1,9 @@
+CREATE TABLE student_authorities
+(
+    student_id BIGINT       NOT NULL,
+    `role`     VARCHAR(255) NULL
+);
+
 CREATE TABLE student_educations
 (
     student_id     BIGINT       NOT NULL,
@@ -13,10 +19,9 @@ CREATE TABLE students
     id                BIGINT AUTO_INCREMENT NOT NULL,
     username          VARCHAR(50)           NOT NULL,
     password          VARCHAR(100)          NOT NULL,
-    email             VARCHAR(100)          NOT NULL,
-    full_name         VARCHAR(50)           NOT NULL,
-    student_id_number VARCHAR(20)           NULL,
-    phone_number      VARCHAR(20)           NULL,
+    email             VARCHAR(100)          NULL,
+    full_name         VARCHAR(50)           NULL,
+    phone_number      VARCHAR(20)           NOT NULL,
     university        VARCHAR(100)          NULL,
     major             VARCHAR(50)           NULL,
     degree            VARCHAR(20)           NULL,
@@ -31,10 +36,10 @@ ALTER TABLE students
     ADD CONSTRAINT uc_students_email UNIQUE (email);
 
 ALTER TABLE students
-    ADD CONSTRAINT uc_students_studentidnumber UNIQUE (student_id_number);
-
-ALTER TABLE students
     ADD CONSTRAINT uc_students_username UNIQUE (username);
+
+ALTER TABLE student_authorities
+    ADD CONSTRAINT fk_student_authorities_on_student FOREIGN KEY (student_id) REFERENCES students (id);
 
 ALTER TABLE student_educations
     ADD CONSTRAINT fk_student_educations_on_student FOREIGN KEY (student_id) REFERENCES students (id);

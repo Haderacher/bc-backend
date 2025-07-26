@@ -1,6 +1,7 @@
 package com.haderacher.bcbackend.entity.aggregates.student;
 
 import com.haderacher.bcbackend.entity.aggregates.resume.Resume;
+import com.haderacher.bcbackend.entity.valueobject.Authority;
 import com.haderacher.bcbackend.entity.valueobject.Education;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,16 +29,13 @@ public class Student {
     @Column(nullable = false, length = 100) // 密码，不允许为空，需要加密存储
     private String password;
 
-    @Column(nullable = false, unique = true, length = 100) // 邮箱，不允许为空，唯一，最大长度100
+    @Column(unique = true, length = 100) // 邮箱，不允许为空，唯一，最大长度100
     private String email;
 
-    @Column(nullable = false, length = 50) // 真实姓名
+    @Column(length = 50) // 真实姓名
     private String fullName;
 
-    @Column(unique = true, length = 20) // 学号，可以唯一
-    private String studentIdNumber;
-
-    @Column(length = 20) // 手机号
+    @Column(nullable = false, length = 20) // 手机号
     private String phoneNumber;
 
     @Column(length = 100) // 所在大学
@@ -62,6 +60,13 @@ public class Student {
     )
     private List<Education> educationHistory = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "student_authorities",
+            joinColumns =  @JoinColumn(name = "student_id")
+    )
+    private List<Authority> authorities = new ArrayList<>();
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Resume> resumes = new HashSet<>();
 
@@ -74,6 +79,8 @@ public class Student {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.authorities = new ArrayList<>();
+        authorities.add(new Authority(Authority.RoleType.ROLE_STUDENT));
     }
 
     @PreUpdate

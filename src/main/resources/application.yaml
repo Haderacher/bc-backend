@@ -1,4 +1,13 @@
 spring:
+  data:
+    redis:
+      url: redis://localhost:6379/0
+    mongodb:
+      uri: mongodb://root:example@localhost:27017?authSource=admin
+      username: root
+      password: example
+      database: bigchuang
+      authentication-database: admin
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/career_plan
     username: user
@@ -7,3 +16,32 @@ spring:
     hibernate:
       ddl-auto: update
     database: mysql
+  ai:
+    model:
+      embedding: ollama
+      chat: deepseek
+    ollama:
+      base-url: http://localhost:11434
+      embedding:
+        model: nomic-embed-text
+    vectorstore:
+      redis:
+        index-name: default-index
+        prefix: "default:"
+    deepseek:
+      api-key: sk-191e323122684eb6b93d50b853ea49ed
+      chat:
+        options:
+          model: deepseek-chat
+          temperature: 0.8
+
+
+jwt:
+  secret: S3BIdWVCb0VSUEJuclBYbnVUNGY5NURDMTdZVWVsQjI0THNtS3N5c3RObkROVW0xS0lOSXRaV3Z0Z2dJSUZTaQ==
+  sessionTime: 86400
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
