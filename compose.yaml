@@ -30,3 +30,13 @@ services:
     ports:
       - 6379:6379
       - 8002:8002
+  minio:
+    image: minio/minio:latest
+    container_name: my-minio-server
+    ports:
+      - "9000:9000"  # API 端口
+      - "9001:9001"  # 控制台 Web UI 端口
+    environment:
+      MINIO_ROOT_USER: minioadmin      # 设置你自己的访问密钥
+      MINIO_ROOT_PASSWORD: minioadmin  # 设置你自己的秘密密钥
+    command: server /data --console-address ":9001"
